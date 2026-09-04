@@ -175,8 +175,31 @@
   from { background-position: 200% 0; }
   to { background-position: -200% 0; }
 }
+@keyframes wheel-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+@keyframes cycle-blur {
+  0% { filter: blur(0px); }
+  50% { filter: blur(3px); }
+  100% { filter: blur(0px); }
+}
+@keyframes sparkle {
+  0% { transform: scale(0) rotate(0deg); opacity: 0; }
+  60% { opacity: 1; }
+  100% { transform: scale(1.2) rotate(45deg); opacity: 0; }
+}
+@keyframes result-bounce {
+  0% { transform: scale(0.6); opacity: 0; }
+  60% { transform: scale(1.08); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
 .animate-fade-up { animation: fade-up .55s cubic-bezier(.22,1,.36,1) both; }
 .animate-pop-in { animation: pop-in .42s cubic-bezier(.22,1,.36,1) both; }
+.animate-wheel-spin { animation: wheel-spin 1.4s cubic-bezier(.15,.85,.3,1) both; }
+.animate-cycle-blur { animation: cycle-blur .18s linear infinite; }
+.animate-result-bounce { animation: result-bounce .5s cubic-bezier(.22,1,.36,1) both; }
+.animate-sparkle { animation: sparkle .8s ease-out both; }
 .animate-delay-1 { animation-delay: 80ms; }
 .animate-delay-2 { animation-delay: 160ms; }
 .animate-delay-3 { animation-delay: 240ms; }
