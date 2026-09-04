@@ -1,13 +1,25 @@
 import sharp from 'sharp'
 
-const light = sharp('public/icon-light-32x32.png')
-const dark = sharp('public/icon-dark-32x32.png')
+// ベクターのicon.svgから高品質に各サイズをレンダリング
+const ICON_SRC = 'public/icon.svg'
 
-const favicon32 = await light.clone().resize(32, 32).png().toBuffer()
-const favicon16 = await light.clone().resize(16, 16).png().toBuffer()
+// SVGを高解像度でレンダリング（density 上げてからリサイズ→シャープにもう少し余裕）
+const svgBuffer = await sharp(ICON_SRC, { density: 384 }).png().toBuffer()
+const source = sharp(svgBuffer)
 
-await sharp(Buffer.concat([favicon16, favicon32])).toFile('public/favicon.ico')
+const sizes = [16, 32, 192, 512]
 
-await light.clone().resize(180, 180).png().toFile('public/apple-touch-icon.png')
+for (const size of sizes) {
+  await source.clone().resize(size, size).png().toFile(`public/icon-${size}x${size}.png`)
+}
 
-console.log('favicon.ico + apple-touch-icon.png generated')
+// iOS用（角丸は元SVGのrxを維持）
+await source.clone().resize(180, 180).png().toFile('public/apple-icon.png')
+await source.clone().resize(180, 180).png().toFile('public/apple-touch-icon.png')
+
+// favicon.ico（16 + 32 を連結）
+const ico16 = await source.clone().resize(16, 16).png().toBuffer()
+const ico32 = await source.clone().resize(32, 32).png().toBuffer()
+await sharp(Buffer.concat([ico16, ico32])).toFile('public/favicon.ico')
+
+console.log('icons + favicon generated')
