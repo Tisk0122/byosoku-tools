@@ -1,6 +1,9 @@
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
+import Script from 'next/script'
 import './globals.css'
+
+const THEME_INIT_SCRIPT = `(function(){try{var s=localStorage.getItem('byousoku.theme');var d=s?s==='dark':window.matchMedia('(prefers-color-scheme: dark)').matches;var r=document.documentElement;r.classList.toggle('dark',d);r.classList.toggle('light',!d)}catch(e){}})()`
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://example.com'
 
@@ -93,8 +96,17 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="ja" className="bg-background">
+    <html lang="ja" className="bg-background" suppressHydrationWarning>
       <body className="antialiased">
+        <Script id="theme-init" strategy="beforeInteractive">
+          {THEME_INIT_SCRIPT}
+        </Script>
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-primary focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-primary-foreground"
+        >
+          本文へスキップ
+        </a>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
