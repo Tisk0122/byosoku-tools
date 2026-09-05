@@ -1,7 +1,7 @@
 'use client'
 import Link from 'next/link'
 import { useEffect, useMemo, useState } from 'react'
-import { ArrowLeftRight, ArrowRight, BadgePercent, Binary, Braces, Cake, CalendarRange, ChartNoAxesColumnIncreasing, Clock3, Dices, Eraser, Fingerprint, GitCompare, Menu, Moon, Percent, ReceiptText, Search, Star, Sun, Timer, Trash2, Type, Users, WrapText, X, Zap } from 'lucide-react'
+import { ArrowDownAZ, ArrowLeftRight, ArrowRight, BadgePercent, Binary, Braces, Cake, CalendarCheck2, CalendarPlus, CalendarRange, Check, ChartNoAxesColumnIncreasing, Clock3, Coins, Dice5, Dices, Eraser, Fingerprint, FlipHorizontal2, GitCompare, Hash, HeartPulse, History, KeyRound, Languages, Link2, ListX, Menu, Moon, Palette, Percent, QrCode, ReceiptText, Ruler, ScrollText, Search, Sigma, Star, Sun, Timer, Trash2, Type, Users, WrapText, X, Zap } from 'lucide-react'
 import { categories } from '@/data/categories'
 import { tools, type ToolDefinition } from '@/data/tools'
 
@@ -23,8 +23,8 @@ function clearLocalData(){
  }
 }
 export function Footer(){return <footer className="border-t border-border bg-card"><div className="mx-auto flex max-w-6xl flex-col gap-6 px-5 py-10 md:flex-row md:items-center md:justify-between"><div><Link href="/" className="flex items-center gap-2 font-semibold"><span className="grid size-7 place-items-center rounded-lg bg-primary text-primary-foreground"><Zap size={15} fill="currentColor"/></span>秒速ツール</Link><p className="mt-2 text-sm text-muted-foreground">面倒なことを、1秒で。</p></div><div className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-muted-foreground"><Link href="/">ホーム</Link><Link href="/#categories">カテゴリー</Link><Link href="/#popular">人気ツール</Link><Link href="/terms">利用規約</Link><Link href="/privacy">プライバシーポリシー</Link><Link href="/contact">お問い合わせ</Link><button type="button" onClick={clearLocalData} className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-destructive"><Trash2 size={14}/>保存データを削除</button></div><p className="text-xs text-muted-foreground">© 2026 秒速ツール</p></div></footer>}
-const AD_UNIT_SP={src:'https://adm.shinobi.jp/s/85aa2dd7605fda52b119a8b9f691cb40',width:320,height:50}
-const AD_UNIT_PC={src:'https://adm.shinobi.jp/s/35c6779d0fa252f5a810f17a43736fed',width:728,height:90}
+const AD_UNIT_SP={src:'/api/embed?u=a',width:320,height:50}
+const AD_UNIT_PC={src:'/api/embed?u=b',width:728,height:90}
 export function AdSlot(){
  const [isMobile,setIsMobile]=useState<boolean|null>(null)
  useEffect(()=>{
@@ -36,10 +36,16 @@ export function AdSlot(){
  },[])
  if(isMobile===null)return <div className="mx-auto my-8 h-[50px] w-full max-w-[320px] md:h-[90px] md:max-w-[728px]" aria-hidden="true"/>
  const unit=isMobile?AD_UNIT_SP:AD_UNIT_PC
- const srcDoc=`<!DOCTYPE html><html><head><meta charset="utf-8"></head><body style="margin:0;padding:0;background:transparent"><script type="text/javascript" charset="utf-8" src="${unit.src}"><\/script></body></html>`
+ const srcDoc=`<!DOCTYPE html><html><head><meta charset="utf-8"><style>html,body{margin:0;padding:0;background:transparent}#fb{display:none;height:100%;align-items:center;justify-content:center;font:12px/1.4 system-ui,sans-serif;color:#9aa0a6}</style></head><body><div id="fb">広告を読み込めませんでした</div><script>(function(){var host=document.body;var before=host.childNodes.length;var s=document.createElement('script');s.src='${unit.src}';s.async=true;s.onerror=function(){var f=document.getElementById('fb');if(f)f.style.display='flex'};document.body.appendChild(s);setTimeout(function(){if(host.childNodes.length<=before+1){var f=document.getElementById('fb');if(f)f.style.display='flex'}},4000)})();<\/script></body></html>`
  return <div className="mx-auto my-8 w-full" style={{maxWidth:unit.width}}><iframe key={unit.src} title="広告" srcDoc={srcDoc} className="block w-full border-0" style={{height:unit.height}} loading="lazy"/></div>
 }
-function Icon({name}:{name:string}){const icons:any={Type,Search,Dices,Zap,WrapText,Eraser,ArrowLeftRight,GitCompare,ReceiptText,BadgePercent,Percent,Users,Cake,CalendarRange,Timer,ChartNoAxesColumnIncreasing,Clock3,Braces,Fingerprint,Binary}; const I=icons[name]||Zap; return <I size={20}/>}
+export function ShareButtons({url,title}:{url:string;title:string}){
+ const [copied,setCopied]=useState(false)
+ const encodedUrl=encodeURIComponent(url); const encodedTitle=encodeURIComponent(title)
+ const copy=async()=>{try{await navigator.clipboard.writeText(url);setCopied(true);window.setTimeout(()=>setCopied(false),1500)}catch{/* ignore */}}
+ return <div className="flex flex-wrap items-center gap-2"><span className="text-sm font-medium text-muted-foreground">シェア：</span><a href={`https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}`} target="_blank" rel="noopener noreferrer" className="secondary">X (Twitter)</a><a href={`https://social-plugins.line.me/lineit/share?url=${encodedUrl}&text=${encodedTitle}`} target="_blank" rel="noopener noreferrer" className="secondary">LINE</a><button type="button" onClick={copy} className="secondary">{copied?<><Check size={16}/>コピーしました</>:<><Link2 size={16}/>リンクをコピー</>}</button></div>
+}
+function Icon({name}:{name:string}){const icons:any={Type,Search,Dices,Zap,WrapText,Eraser,ArrowLeftRight,GitCompare,ReceiptText,BadgePercent,Percent,Users,Cake,CalendarRange,Timer,ChartNoAxesColumnIncreasing,Clock3,Braces,Fingerprint,Binary,FlipHorizontal2,ListX,ArrowDownAZ,Languages,HeartPulse,Sigma,CalendarCheck2,CalendarPlus,Hash,Palette,KeyRound,Coins,Dice5,QrCode,Link2,Ruler,History,ScrollText}; const I=icons[name]||Zap; return <I size={20}/>}
 
 const FAVORITES_KEY='byousoku.favorites'
 const FAVORITES_EVENT='byousoku:favorites-changed'
